@@ -8,6 +8,6 @@ import androidx.fragment.app.Fragment;
 public class BeatBoxActivity extends BaseSingleFragmentActivity {
     @Override
     protected Fragment createFragment() {
-        return BeatboxFragment.newInstance();
+        return BeatBoxFragment.newInstance();
     }
 }
