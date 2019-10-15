@@ -1,7 +1,11 @@
 package com.changsheng.beatbox;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Build;
 import android.util.Log;
 
@@ -17,7 +21,13 @@ public class BeatBox {
 
     public static final String SOUNDS_FOLDER = "sample_sounds";
 
+    public static final int MAX_SOUNDS =5;
+
+
+
     private AssetManager mAsset;
+
+    private SoundPool mSoundPool;
 
     public List<Sound> getSounds() {
         return mSounds;
@@ -28,6 +38,8 @@ public class BeatBox {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public BeatBox(Context context) {
         mAsset = context.getAssets();
+        mSoundPool=new SoundPool(MAX_SOUNDS, AudioManager.STREAM_MUSIC,0);
+
         listSounds();
     }
 
@@ -40,6 +52,7 @@ public class BeatBox {
             for (String filename : soundNames) {
                 String assetPath = SOUNDS_FOLDER + "/" + filename;
                 Sound sound = new Sound(assetPath);
+                load(sound);
                 mSounds.add(sound);
             }
         } catch (IOException e) {
@@ -47,4 +60,25 @@ public class BeatBox {
         }
 
     }
+
+
+    private void load(Sound sound) throws IOException {
+        AssetFileDescriptor descriptor=mAsset.openFd(sound.getAssetPath());
+        int soundId=mSoundPool.load(descriptor,1);
+        sound.setSoundId(soundId);
+    }
+
+    public void play(Sound sound){
+        Integer soundId=sound.getSoundId();
+        if(soundId==null){
+            return;
+        }
+        mSoundPool.play(soundId,1.0f,1.0f,1,0,1.0f);
+    }
+
+    public void release(){
+        mSoundPool.release();
+    }
+
+
 }

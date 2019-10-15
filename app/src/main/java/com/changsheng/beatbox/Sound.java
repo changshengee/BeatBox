@@ -1,8 +1,12 @@
 package com.changsheng.beatbox;
 
+import android.content.Intent;
+
 public class Sound {
     private String mAssetPath;
     private String mName;
+
+    private Integer mSoundId;
 
     public Sound(String assetPath) {
         mAssetPath = assetPath;
@@ -17,6 +21,16 @@ public class Sound {
 
     public void setAssetPath(String assetPath) {
         mAssetPath = assetPath;
+    }
+
+
+    public void setSoundId(Integer soundId) {
+        mSoundId = soundId;
+    }
+
+
+    public Integer getSoundId() {
+        return mSoundId;
     }
 
     public String getName() {
